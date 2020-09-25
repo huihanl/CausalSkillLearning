@@ -21,7 +21,7 @@ class Roboturk_Dataset(Dataset):
 
 	# Class implementing instance of Roboturk dataset. 
 	def __init__(self, args):
-		self.dataset_directory = '/checkpoint/tanmayshankar/Roboturk/RoboTurkPilot'
+		self.dataset_directory = '/nfs/kun1/users/huihanl/RoboTurkPilot'
 		self.args = args
 		# Require a task list. 
 
@@ -144,7 +144,7 @@ class Roboturk_Dataset(Dataset):
 
 		# for task_index in range(len(self.task_list)):
 		# for task_index in [3,5]:
-		for task_index in [0,1,2,4,6,7]:
+		for task_index in [3,5]:
 
 			print("#######################################")
 			print("Preprocessing task index: ", task_index)
@@ -231,7 +231,7 @@ class Roboturk_Dataset(Dataset):
 			task_demo_array = np.array(task_demo_list)
 
 			# Now save this file_demo_list. 
-			np.save(os.path.join(self.dataset_directory,self.task_list[task_index],"New_Task_Demo_Array.npy"),task_demo_array)
+			np.save(os.path.join(self.dataset_directory,self.task_list[task_index], "FullDataset_Task__Demo_Array.npy"),task_demo_array)
 
 class Roboturk_FullDataset(Roboturk_Dataset):
 	def __init__(self, args):
@@ -292,7 +292,7 @@ class Roboturk_SegmentedDataset(Roboturk_Dataset):
 
 		super(Roboturk_SegmentedDataset, self).__init__()
 		
-		self.dataset_directory = '/checkpoint/tanmayshankar/Roboturk/RoboTurkPilot'
+		self.dataset_directory = '/nfs/kun1/users/huihanl/RoboTurkPilot'
 
 		# Require a task list. 
 		# The task name is needed for setting the environment, rendering. 
@@ -338,7 +338,7 @@ class Roboturk_NewSegmentedDataset(Dataset):
 
 		super(Roboturk_NewSegmentedDataset, self).__init__()
 		
-		self.dataset_directory = '/checkpoint/tanmayshankar/Roboturk/RoboTurkPilot'
+		self.dataset_directory = '/nfs/kun1/users/huihanl/RoboTurkPilot'
 		self.args = args
 		# Require a task list. 
 		# The task name is needed for setting the environment, rendering. 

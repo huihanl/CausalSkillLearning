@@ -44,6 +44,7 @@ class PolicyManager_BaseClass():
 	def initialize_plots(self):
 		if self.args.name is not None:
 			logdir = os.path.join(self.args.logdir, self.args.name)
+			logdir = "nfs/kun1/users/huihanl/" + logdir
 			if not(os.path.isdir(logdir)):
 				os.mkdir(logdir)
 			logdir = os.path.join(logdir, "logs")
@@ -1003,7 +1004,7 @@ class PolicyManager_Pretrain(PolicyManager_BaseClass):
 				self.update_policies_reparam(loglikelihood, subpolicy_inputs, kl_divergence)
 
 				# Update Plots. 
-				self.update_plots(counter, loglikelihood, trajectory_segment)
+				#self.update_plots(counter, loglikelihood, trajectory_segment)
 
 				if return_z: 
 					return latent_z, sample_traj, sample_action_seq
