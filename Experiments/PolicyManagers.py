@@ -578,6 +578,15 @@ class PolicyManager_Pretrain(PolicyManager_BaseClass):
 			self.cond_object_state_size = 23			
 			self.conditional_info_size = self.cond_robot_state_size+self.cond_object_state_size
 
+		elif self.args.data == 'WidowX250s':
+			self.state_size = 10  # TODO: what is this?
+			self.state_dim = 10
+			self.input_size = 2*self.state_size
+			self.hidden_size = self.args.hidden_size
+			self.output_size = self.state_size
+			self.number_layers = self.args.number_layers
+			self.traj_length = self.args.traj_length
+
 		elif self.args.data=='Mocap':
 			self.state_size = 22*3
 			self.state_dim = 22*3	
@@ -786,9 +795,9 @@ class PolicyManager_Pretrain(PolicyManager_BaseClass):
 			# If Invalid.
 			if not(data_element['is_valid']):
 				return None, None, None
-				
+
 			# if self.args.data=='MIME':
-			# 	# Sample a trajectory length that's valid. 			
+			# 	# Sample a trajectory length that's valid.
 			# 	trajectory = np.concatenate([data_element['la_trajectory'],data_element['ra_trajectory'],data_element['left_gripper'].reshape((-1,1)),data_element['right_gripper'].reshape((-1,1))],axis=-1)
 			# elif self.args.data=='Roboturk':
 			# 	trajectory = data_element['demo']
@@ -855,6 +864,58 @@ class PolicyManager_Pretrain(PolicyManager_BaseClass):
 			scaled_action_sequence = self.args.action_scale_factor*action_sequence
 
 			return concatenated_traj, scaled_action_sequence, trajectory
+
+		elif self.args.data == 'WidowX250s':
+
+			data_element = self.dataset[i]
+
+			if self.args.gripper:
+				trajectory = data_element['demo']
+			else:
+				trajectory = data_element['demo'][:, :-1]
+
+			# If allowing variable skill length, set length for this sample.
+			if self.args.var_skill_length:
+				# Choose length of 12-16 with certain probabilities.
+				self.current_traj_len = np.random.choice([12, 13, 14, 15, 16], p=[0.1, 0.2, 0.4, 0.2, 0.1])
+			else:
+				self.current_traj_len = self.traj_length
+
+			# Sample random start point.
+			if trajectory.shape[0] > self.current_traj_len:
+
+				bias_length = int(self.args.pretrain_bias_sampling * trajectory.shape[0])
+
+				# Probability with which to sample biased segment:
+				sample_biased_segment = np.random.binomial(1, p=self.args.pretrain_bias_sampling_prob)
+
+				# If we want to bias sampling of trajectory segments towards the middle of the trajectory, to increase
+				# proportion of trajectory segments that are performing motions apart from reaching and returning.
+
+				# Sample a biased segment if trajectory length is sufficient, and based on probability of sampling.
+				if ((trajectory.shape[0] - 2 * bias_length) > self.current_traj_len) and sample_biased_segment:
+					start_timepoint = np.random.randint(bias_length,
+														trajectory.shape[0] - self.current_traj_len - bias_length)
+				else:
+					start_timepoint = np.random.randint(0, trajectory.shape[0] - self.current_traj_len)
+
+				end_timepoint = start_timepoint + self.current_traj_len
+
+				# Get trajectory segment and actions.
+				trajectory = trajectory[start_timepoint:end_timepoint]
+
+			else:
+				return None, None, None
+
+			action_sequence = np.diff(trajectory, axis=0)
+			# Concatenate
+			concatenated_traj = self.concat_state_action(trajectory, action_sequence)
+
+			# NOW SCALE THIS ACTION SEQUENCE BY SOME FACTOR:
+			scaled_action_sequence = self.args.action_scale_factor * action_sequence
+
+			return concatenated_traj, scaled_action_sequence, trajectory
+
 
 	def construct_dummy_latents(self, latent_z):
 

@@ -15,6 +15,7 @@ def resample(original_trajectory, desired_number_timepoints):
 	new_timepoints = np.linspace(0, original_traj_len-1, desired_number_timepoints, dtype=int)
 	return original_trajectory[new_timepoints]
 
+
 class Roboturk_Dataset(Dataset):
 
 	# LINK TO DATASET and INFO: http://roboturk.stanford.edu/dataset.html

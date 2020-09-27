@@ -5,7 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 
 from headers import *
-import DataLoaders, MIME_DataLoader, Roboturk_DataLoader, Mocap_DataLoader
+import DataLoaders, MIME_DataLoader, Roboturk_DataLoader, Mocap_DataLoader, WidowX250s_Dataloader
 from PolicyManagers import *
 import TestClass
 
@@ -33,7 +33,8 @@ def return_dataset(args, data=None):
 		dataset = Roboturk_DataLoader.Roboturk_FullDataset(args)
 	elif args.data=='Mocap':
 		dataset = Mocap_DataLoader.Mocap_Dataset(args)
-
+	elif args.data=='WidowX250s':
+		dataset = WidowX250s_Dataloader.WidowX250s_Dataset(args)
 	return dataset
 
 class Master():
