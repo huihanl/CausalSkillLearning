@@ -39,12 +39,12 @@ class PolicyManager_BaseClass():
 			extent = len(self.dataset)-self.test_set_size
 
 		self.index_list = np.arange(0,extent)
-		self.initialize_plots()
+		#self.initialize_plots()
 
 	def initialize_plots(self):
 		if self.args.name is not None:
 			logdir = os.path.join(self.args.logdir, self.args.name)
-			logdir = "nfs/kun1/users/huihanl/" + logdir
+			logdir = "/nfs/kun1/users/huihanl/" + logdir
 			if not(os.path.isdir(logdir)):
 				os.mkdir(logdir)
 			logdir = os.path.join(logdir, "logs")
