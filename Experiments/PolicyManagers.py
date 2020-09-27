@@ -55,6 +55,7 @@ class PolicyManager_BaseClass():
 		else:
 			self.tf_logger = TFLogger.Logger()
 
+		"""
 		if self.args.data=='MIME':
 			self.visualizer = BaxterVisualizer()
 			# self.state_dim = 16
@@ -65,6 +66,7 @@ class PolicyManager_BaseClass():
 			self.visualizer = MocapVisualizer(args=self.args)
 		else: 
 			self.visualizer = ToyDataVisualizer()
+		"""
 
 		self.rollout_gif_list = []
 		self.gt_gif_list = []
@@ -3659,7 +3661,8 @@ class PolicyManager_Transfer(PolicyManager_BaseClass):
 			self.tf_logger.scalar_summary('Discriminator Loss', self.discriminator_loss, counter)
 			# Compute discriminator prob of right action for logging. 
 			self.tf_logger.scalar_summary('Discriminator Probability', viz_dict['discriminator_probs'], counter)
-		
+
+		"""
 		# If we are displaying things: 
 		if counter%self.args.display_freq==0:
 
@@ -3716,7 +3719,7 @@ class PolicyManager_Transfer(PolicyManager_BaseClass):
 
 				self.tf_logger.scalar_summary('Source To Target Trajectory Distance', self.source_target_trajectory_distance, counter)		
 				self.tf_logger.scalar_summary('Target To Source Trajectory Distance', self.target_source_trajectory_distance, counter)
-
+		"""
 	def get_transform(self, latent_z_set, projection='tsne', shared=False):
 
 		if shared:
