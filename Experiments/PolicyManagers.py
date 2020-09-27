@@ -44,7 +44,7 @@ class PolicyManager_BaseClass():
 	def initialize_plots(self):
 		if self.args.name is not None:
 			logdir = os.path.join(self.args.logdir, self.args.name)
-			logdir = "/nfs/kun1/users/huihanl/" + logdir
+			logdir = "/home/huihanl/Causal-huihan/Experiments/" + logdir
 			if not(os.path.isdir(logdir)):
 				os.mkdir(logdir)
 			logdir = os.path.join(logdir, "logs")
@@ -76,8 +76,9 @@ class PolicyManager_BaseClass():
 			os.mkdir(self.dir_name)
 
 	def write_and_close(self):
-		self.writer.export_scalars_to_json("./all_scalars.json")
-		self.writer.close()
+		pass
+		#self.writer.export_scalars_to_json("./all_scalars.json")
+		#self.writer.close()
 
 	def collect_inputs(self, i, get_latents=False):
 
