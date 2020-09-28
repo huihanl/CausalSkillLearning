@@ -15,6 +15,7 @@ class WidowX250s_Dataset(Dataset):
         self.dataset = np.load(self.dataset_directory, allow_pickle=True)
         self.args = args
         self.total_length = len(self.dataset)
+        #import ipdb; ipdb.set_trace()
         self.environment_names = ["Widow250GraspEasy-v0"]
 
     def __len__(self):

@@ -194,7 +194,7 @@ class PolicyManager_BaseClass():
 				extent = self.extent
 			else:
 				extent = len(self.dataset)-self.test_set_size
-
+			#import ipdb; ipdb.set_trace()
 			for i in range(extent):
 
 				print("Epoch: ",e," Trajectory:",i, "Datapoint: ", self.index_list[i])
@@ -529,7 +529,7 @@ class PolicyManager_Pretrain(PolicyManager_BaseClass):
 		self.number_layers = self.args.number_layers
 		self.traj_length = 5
 		self.number_epochs = self.args.epochs
-		self.test_set_size = 500
+		self.test_set_size = 50
 
 		if self.args.data=='MIME':
 			self.state_size = 16			
@@ -1067,7 +1067,7 @@ class PolicyManager_Pretrain(PolicyManager_BaseClass):
 				self.update_policies_reparam(loglikelihood, subpolicy_inputs, kl_divergence)
 
 				# Update Plots. 
-				#self.update_plots(counter, loglikelihood, trajectory_segment)
+				self.update_plots(counter, loglikelihood, trajectory_segment)
 
 				if return_z: 
 					return latent_z, sample_traj, sample_action_seq
@@ -3662,7 +3662,6 @@ class PolicyManager_Transfer(PolicyManager_BaseClass):
 			# Compute discriminator prob of right action for logging. 
 			self.tf_logger.scalar_summary('Discriminator Probability', viz_dict['discriminator_probs'], counter)
 
-		"""
 		# If we are displaying things: 
 		if counter%self.args.display_freq==0:
 
@@ -3719,7 +3718,6 @@ class PolicyManager_Transfer(PolicyManager_BaseClass):
 
 				self.tf_logger.scalar_summary('Source To Target Trajectory Distance', self.source_target_trajectory_distance, counter)		
 				self.tf_logger.scalar_summary('Target To Source Trajectory Distance', self.target_source_trajectory_distance, counter)
-		"""
 	def get_transform(self, latent_z_set, projection='tsne', shared=False):
 
 		if shared:
